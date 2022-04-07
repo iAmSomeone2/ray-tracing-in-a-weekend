@@ -14,6 +14,14 @@
 		942284B027FDD0A100E63F29 /* Ray_TracerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 942284AF27FDD0A100E63F29 /* Ray_TracerTests.swift */; };
 		942284BA27FDD0A100E63F29 /* Ray_TracerUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 942284B927FDD0A100E63F29 /* Ray_TracerUITests.swift */; };
 		942284BC27FDD0A100E63F29 /* Ray_TracerUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 942284BB27FDD0A100E63F29 /* Ray_TracerUITestsLaunchTests.swift */; };
+		942284CA27FE0B0800E63F29 /* Renderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 942284C927FE0B0800E63F29 /* Renderer.swift */; };
+		942284CC27FE0C6B00E63F29 /* Pixel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 942284CB27FE0C6B00E63F29 /* Pixel.swift */; };
+		942284CE27FE116B00E63F29 /* utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 942284CD27FE116B00E63F29 /* utility.swift */; };
+		942284D027FF65CB00E63F29 /* Vec3.swift in Sources */ = {isa = PBXBuildFile; fileRef = 942284CF27FF65CB00E63F29 /* Vec3.swift */; };
+		942284D227FF8D1100E63F29 /* Ray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 942284D127FF8D1100E63F29 /* Ray.swift */; };
+		942284D427FF8E7700E63F29 /* Camera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 942284D327FF8E7700E63F29 /* Camera.swift */; };
+		942284D727FF9FD000E63F29 /* Primative.swift in Sources */ = {isa = PBXBuildFile; fileRef = 942284D627FF9FD000E63F29 /* Primative.swift */; };
+		942284D927FFA09500E63F29 /* Sphere.swift in Sources */ = {isa = PBXBuildFile; fileRef = 942284D827FFA09500E63F29 /* Sphere.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -45,6 +53,14 @@
 		942284B527FDD0A100E63F29 /* Ray TracerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Ray TracerUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		942284B927FDD0A100E63F29 /* Ray_TracerUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ray_TracerUITests.swift; sourceTree = "<group>"; };
 		942284BB27FDD0A100E63F29 /* Ray_TracerUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ray_TracerUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		942284C927FE0B0800E63F29 /* Renderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Renderer.swift; sourceTree = "<group>"; };
+		942284CB27FE0C6B00E63F29 /* Pixel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pixel.swift; sourceTree = "<group>"; };
+		942284CD27FE116B00E63F29 /* utility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = utility.swift; sourceTree = "<group>"; };
+		942284CF27FF65CB00E63F29 /* Vec3.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Vec3.swift; sourceTree = "<group>"; };
+		942284D127FF8D1100E63F29 /* Ray.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ray.swift; sourceTree = "<group>"; };
+		942284D327FF8E7700E63F29 /* Camera.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Camera.swift; sourceTree = "<group>"; };
+		942284D627FF9FD000E63F29 /* Primative.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Primative.swift; sourceTree = "<group>"; };
+		942284D827FFA09500E63F29 /* Sphere.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sphere.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -95,6 +111,7 @@
 		9422849C27FDD09F00E63F29 /* Ray Tracer */ = {
 			isa = PBXGroup;
 			children = (
+				942284C827FE0ADA00E63F29 /* Rendering */,
 				9422849D27FDD09F00E63F29 /* Ray_TracerApp.swift */,
 				9422849F27FDD09F00E63F29 /* ContentView.swift */,
 				942284A127FDD0A100E63F29 /* Assets.xcassets */,
@@ -127,6 +144,29 @@
 				942284BB27FDD0A100E63F29 /* Ray_TracerUITestsLaunchTests.swift */,
 			);
 			path = "Ray TracerUITests";
+			sourceTree = "<group>";
+		};
+		942284C827FE0ADA00E63F29 /* Rendering */ = {
+			isa = PBXGroup;
+			children = (
+				942284D527FF9F8900E63F29 /* Primatives */,
+				942284C927FE0B0800E63F29 /* Renderer.swift */,
+				942284CB27FE0C6B00E63F29 /* Pixel.swift */,
+				942284CD27FE116B00E63F29 /* utility.swift */,
+				942284CF27FF65CB00E63F29 /* Vec3.swift */,
+				942284D127FF8D1100E63F29 /* Ray.swift */,
+				942284D327FF8E7700E63F29 /* Camera.swift */,
+			);
+			path = Rendering;
+			sourceTree = "<group>";
+		};
+		942284D527FF9F8900E63F29 /* Primatives */ = {
+			isa = PBXGroup;
+			children = (
+				942284D627FF9FD000E63F29 /* Primative.swift */,
+				942284D827FFA09500E63F29 /* Sphere.swift */,
+			);
+			path = Primatives;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -259,7 +299,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				942284D927FFA09500E63F29 /* Sphere.swift in Sources */,
+				942284D727FF9FD000E63F29 /* Primative.swift in Sources */,
+				942284D427FF8E7700E63F29 /* Camera.swift in Sources */,
+				942284CC27FE0C6B00E63F29 /* Pixel.swift in Sources */,
+				942284CE27FE116B00E63F29 /* utility.swift in Sources */,
 				942284A027FDD09F00E63F29 /* ContentView.swift in Sources */,
+				942284D227FF8D1100E63F29 /* Ray.swift in Sources */,
+				942284CA27FE0B0800E63F29 /* Renderer.swift in Sources */,
+				942284D027FF65CB00E63F29 /* Vec3.swift in Sources */,
 				9422849E27FDD09F00E63F29 /* Ray_TracerApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
