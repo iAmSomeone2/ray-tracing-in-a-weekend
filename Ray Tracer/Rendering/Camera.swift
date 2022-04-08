@@ -37,4 +37,10 @@ public struct Camera {
         self.imageWidth = width
         self.imageHeight = height
     }
+    
+    public func getRay(for loc: (u: Double, v: Double)) -> Ray {
+        return Ray(
+            origin: origin,
+            direction: lowerLeftCorner + loc.u * horizontal + loc.v * vertical - origin)
+    }
 }

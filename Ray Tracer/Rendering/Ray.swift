@@ -20,9 +20,10 @@ public struct Ray {
         return self.origin + (t * self.direction)
     }
     
-    public func color(_ p: Primative) -> Pixel {
-        if p.checkHit(with: self) {
-            return Pixel(red: 1, green: 0, blue: 0)
+    public func color(_ p: Renderable) -> Pixel {
+        let hit = p.checkHit(with: self, tMin: 0.001, tMax: Double.infinity)
+        if hit.didHit {
+            return 0.5 * (hit.normal! + Pixel(red: 1, green: 1, blue: 1))
         }
         
         let unitDir = self.direction.unitVector

@@ -66,7 +66,8 @@ public struct Renderer {
     private var renderProgress: RenderProgress
     private let camera: Camera
     
-    private let sphere = Sphere(origin: Vec3(x: 0, y: 0, z: -1), radius: 0.5)
+//    private let sphere = Sphere(origin: Vec3(x: 0, y: 0, z: -1), radius: 0.5)
+    public var scene = RenderableList()
     
     public init(width w: UInt16 = 256, height h: UInt16 = 256) {
         self.width = w
@@ -75,6 +76,9 @@ public struct Renderer {
         self.context = RenderContext(width: w, height: h)
         self.renderProgress = RenderProgress(target: UInt32(w) * UInt32(h))
         self.camera = Camera(imageWidth: w, imageHeight: h)
+        
+        self.scene.objects.append(Sphere(origin: Vec3(x: 0, y: 0, z: -1), radius: 0.5))
+        self.scene.objects.append(Sphere(origin: Vec3(x: 0, y: -100.5, z: -1), radius: 100))
     }
     
     public func getProgress() async -> Double {
@@ -82,29 +86,18 @@ public struct Renderer {
     }
     
     private func renderRow(_ row: UInt16) async {
-        for col in 0..<self.width {
-            let u = Double(self.width - col) / Double(self.width - 1)
-            let v = Double(self.height - row) / Double(self.height - 1)
-            let ray = Ray(
-                origin: camera.origin,
-                direction: camera.lowerLeftCorner + u * camera.horizontal + v * camera.vertical - camera.origin)
+        for x in 1..<self.width {
+            let col = self.width - x
+            let u = Double(col) / Double(self.width - 1)
+            let v = Double(row) / Double(self.height - 1)
+            let ray = camera.getRay(for: (u, v))
             
-            await self.context.setPixel(ray.color(sphere), at: (col, row))
+            await self.context.setPixel(ray.color(self.scene), at: (col, height-row))
             await self.renderProgress.increment()
         }
     }
     
-    public func render() async -> CGImage {
-        await self.renderProgress.reset()
-        // Render scene
-        await withTaskGroup(of: Void.self) { group in
-            for y in 0..<self.height {
-                group.addTask {
-                    await renderRow(y)
-                }
-            }
-        }
-        
+    public func getCGImage() async -> CGImage {
         // Get finished data from render context and create CGImage
         let renderData = await self.context.getData()
         
@@ -120,6 +113,18 @@ public struct Renderer {
             decode: nil,
             shouldInterpolate: false,
             intent: .perceptual)!
-        
+    }
+    
+    public func render() async{
+        await self.renderProgress.reset()
+        // Render scene
+        await withTaskGroup(of: Void.self) { group in
+            for y in 1..<self.height {
+//                let row = self.height - y
+                group.addTask {
+                    await renderRow(y)
+                }
+            }
+        }
     }
 }

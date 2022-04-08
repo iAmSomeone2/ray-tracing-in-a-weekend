@@ -1,6 +1,6 @@
 import Foundation
 
-public struct Sphere : Primative {
+public struct Sphere : Renderable {
     public var origin: Vec3
     public var radius: Double
     
@@ -9,13 +9,32 @@ public struct Sphere : Primative {
         self.radius = r
     }
     
-    public func checkHit(with ray: Ray) -> Bool {
+    public func checkHit(with ray: Ray, tMin: Double = 0.0, tMax: Double = Double.infinity) -> HitRecord {
         let oc = ray.origin - self.origin
-        let a = ray.direction.dot(ray.direction)
-        let b = 2.0 * oc.dot(ray.direction)
-        let c = oc.dot(oc) - self.radius * self.radius
-        let discriminant = (b * b) - (4 * a * c)
+        let a = ray.direction.squaredLength
+        let halfB = oc.dot(ray.direction)
+        let c = oc.squaredLength - self.radius * self.radius
+        let discriminant = (halfB * halfB) - (a * c)
         
-        return discriminant > 0.0
+        if discriminant < 0.0 {
+            return HitRecord(didHit: false)
+        }
+        let sqrtD = sqrt(discriminant)
+        
+        // Find the nearest root that lies in the acceptable range
+        var root = (-halfB - sqrtD) / a
+        if root < tMin || root > tMax {
+            root = (-halfB + sqrtD) / a
+            if root < tMin || root > tMax {
+                return HitRecord(didHit: false)
+            }
+        }
+        
+        let point = ray.getPoint(at: root)
+        var hit = HitRecord(didHit: true, t: root, point: point)
+        let normal = (point - self.origin) / self.radius
+        hit.setFaceNormal(ray: ray, outwardNormal: normal)
+        
+        return hit
     }
 }

@@ -20,8 +20,9 @@
 		942284D027FF65CB00E63F29 /* Vec3.swift in Sources */ = {isa = PBXBuildFile; fileRef = 942284CF27FF65CB00E63F29 /* Vec3.swift */; };
 		942284D227FF8D1100E63F29 /* Ray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 942284D127FF8D1100E63F29 /* Ray.swift */; };
 		942284D427FF8E7700E63F29 /* Camera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 942284D327FF8E7700E63F29 /* Camera.swift */; };
-		942284D727FF9FD000E63F29 /* Primative.swift in Sources */ = {isa = PBXBuildFile; fileRef = 942284D627FF9FD000E63F29 /* Primative.swift */; };
+		942284D727FF9FD000E63F29 /* Renderable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 942284D627FF9FD000E63F29 /* Renderable.swift */; };
 		942284D927FFA09500E63F29 /* Sphere.swift in Sources */ = {isa = PBXBuildFile; fileRef = 942284D827FFA09500E63F29 /* Sphere.swift */; };
+		942284DC2800D93500E63F29 /* RenderSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 942284DB2800D93500E63F29 /* RenderSettingsView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -59,8 +60,9 @@
 		942284CF27FF65CB00E63F29 /* Vec3.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Vec3.swift; sourceTree = "<group>"; };
 		942284D127FF8D1100E63F29 /* Ray.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ray.swift; sourceTree = "<group>"; };
 		942284D327FF8E7700E63F29 /* Camera.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Camera.swift; sourceTree = "<group>"; };
-		942284D627FF9FD000E63F29 /* Primative.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Primative.swift; sourceTree = "<group>"; };
+		942284D627FF9FD000E63F29 /* Renderable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Renderable.swift; sourceTree = "<group>"; };
 		942284D827FFA09500E63F29 /* Sphere.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sphere.swift; sourceTree = "<group>"; };
+		942284DB2800D93500E63F29 /* RenderSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RenderSettingsView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -111,9 +113,9 @@
 		9422849C27FDD09F00E63F29 /* Ray Tracer */ = {
 			isa = PBXGroup;
 			children = (
+				942284DA2800D90100E63F29 /* Views */,
 				942284C827FE0ADA00E63F29 /* Rendering */,
 				9422849D27FDD09F00E63F29 /* Ray_TracerApp.swift */,
-				9422849F27FDD09F00E63F29 /* ContentView.swift */,
 				942284A127FDD0A100E63F29 /* Assets.xcassets */,
 				942284A627FDD0A100E63F29 /* Ray_Tracer.entitlements */,
 				942284A327FDD0A100E63F29 /* Preview Content */,
@@ -163,10 +165,19 @@
 		942284D527FF9F8900E63F29 /* Primatives */ = {
 			isa = PBXGroup;
 			children = (
-				942284D627FF9FD000E63F29 /* Primative.swift */,
+				942284D627FF9FD000E63F29 /* Renderable.swift */,
 				942284D827FFA09500E63F29 /* Sphere.swift */,
 			);
 			path = Primatives;
+			sourceTree = "<group>";
+		};
+		942284DA2800D90100E63F29 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				9422849F27FDD09F00E63F29 /* ContentView.swift */,
+				942284DB2800D93500E63F29 /* RenderSettingsView.swift */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -300,7 +311,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				942284D927FFA09500E63F29 /* Sphere.swift in Sources */,
-				942284D727FF9FD000E63F29 /* Primative.swift in Sources */,
+				942284DC2800D93500E63F29 /* RenderSettingsView.swift in Sources */,
+				942284D727FF9FD000E63F29 /* Renderable.swift in Sources */,
 				942284D427FF8E7700E63F29 /* Camera.swift in Sources */,
 				942284CC27FE0C6B00E63F29 /* Pixel.swift in Sources */,
 				942284CE27FE116B00E63F29 /* utility.swift in Sources */,

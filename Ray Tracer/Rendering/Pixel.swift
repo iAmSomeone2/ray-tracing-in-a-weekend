@@ -73,13 +73,13 @@ public class Pixel {
     }
     
     public static func +=(left: inout Pixel, right: Pixel) {
-        for i in 0..<Pixel.componentCount {
+        for i in 0..<3 {
             left.data[i] += right.data[i]
         }
     }
     
     public static func *=(pix: inout Pixel, t: Double) {
-        for i in 0..<Pixel.componentCount {
+        for i in 0..<3 {
             pix.data[i] *= t
         }
     }
@@ -92,32 +92,35 @@ public class Pixel {
         return Pixel(
             red: left.red + right.red,
             green: left.green + right.green,
-            blue: left.blue + right.blue,
-            alpha: left.alpha + right.alpha)
+            blue: left.blue + right.blue)
+    }
+    
+    public static func +(left: Vec3, right: Pixel) -> Pixel {
+        return Pixel(
+            red: left.x + right.red,
+            green: left.y + right.green,
+            blue: left.z + right.blue)
     }
     
     public static func -(left: Pixel, right: Pixel) -> Pixel {
         return Pixel(
             red: left.red - right.red,
             green: left.green - right.green,
-            blue: left.blue - right.blue,
-            alpha: left.alpha - right.alpha)
+            blue: left.blue - right.blue)
     }
     
     public static func *(left: Pixel, right: Pixel) -> Pixel {
         return Pixel(
             red: left.red * right.red,
             green: left.green * right.green,
-            blue: left.blue * right.blue,
-            alpha: left.alpha * right.alpha)
+            blue: left.blue * right.blue)
     }
     
     public static func *(t: Double, pix: Pixel) -> Pixel {
         return Pixel(
             red: t * pix.red,
             green: t * pix.green,
-            blue: t * pix.blue,
-            alpha: t * pix.alpha)
+            blue: t * pix.blue)
     }
     
     public static func /(pix: Pixel, t: Double) -> Pixel {
