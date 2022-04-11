@@ -11,7 +11,7 @@ struct DimensionInput: View {
     var title: String
     var imageName: String
     
-    @Binding var resolution: CGFloat
+    @Binding var resolution: Int
     
     private let resFormatter = NumberFormatter()
     
@@ -33,34 +33,24 @@ struct DimensionInput: View {
     }
 }
 
-struct ResolutionSettings: View {
-    @State var width: CGFloat
-    @State var height: CGFloat
+struct RenderSettingsView: View {
+    @Binding var width: Int
+    @Binding var height: Int
+    @Binding var samples: Int
     
     var body: some View {
-        GroupBox("Resolution") {
+        GroupBox("Settings") {
             DimensionInput(title: "width", imageName: "arrow.left.and.right.square", resolution: $width)
                 .padding([.top, .leading, .trailing])
             DimensionInput(title: "height", imageName: "arrow.up.and.down.square", resolution: $height)
-                .padding([.leading, .bottom, .trailing])
         }
     }
 }
 
-struct RenderSettingsView: View {
-    @State var width: CGFloat
-    @State var height: CGFloat
-    
-    var body: some View {
-        ResolutionSettings(width: width, height: height)
-            .padding()
-    }
-}
-
-struct RenderSettingsView_Previews: PreviewProvider {
-    static var previews: some View {
-        Group {
-            RenderSettingsView(width: 240.0, height: 360.0)
-        }
-    }
-}
+//struct RenderSettingsView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        Group {
+//            RenderSettingsView(width: 240.0, height: 360.0)
+//        }
+//    }
+//}

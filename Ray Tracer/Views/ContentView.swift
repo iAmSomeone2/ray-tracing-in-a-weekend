@@ -1,8 +1,9 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State private var renderWidth: CGFloat = 720
-    @State private var renderHeight: CGFloat = 480
+    @State var renderWidth: Int = 720
+    @State var renderHeight: Int = 480
+    @State var renderSamples: Int = 100
     
     @State private var renderImg = Image(systemName: "photo")
     @State private var rendering = false
@@ -10,11 +11,12 @@ struct ContentView: View {
     
     @State private var progress: Double = 0.0
     @State private var progressOpacity: Double = 0.0
+    @State private var infoMessage: String = ""
     
     var body: some View {
         HStack {
             VStack {
-                ResolutionSettings(width: renderWidth, height: renderHeight)
+                RenderSettingsView(width: $renderWidth, height: $renderHeight, samples: $renderSamples)
                 
                 Spacer()
                 
@@ -27,17 +29,24 @@ struct ContentView: View {
             
             Divider()
             
-            ZStack {
-                renderImg
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .opacity(renderOpacity)
-                ProgressView(value: progress, total: 1.0) {
-                    Text("Rendering...")
+            VStack {
+                ZStack {
+                    renderImg
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .opacity(renderOpacity)
+                    ProgressView(value: progress, total: 1.0) {
+                        Text("Rendering...")
+                    }
+                    .opacity(progressOpacity)
                 }
-                .opacity(progressOpacity)
+                .frame(idealWidth: CGFloat(renderWidth), idealHeight: CGFloat(renderHeight), alignment: .center)
+                
+                Divider()
+                
+                Text(infoMessage)
+                    .font(.body)
             }
-            .frame(idealWidth: CGFloat(renderWidth), idealHeight: CGFloat(renderHeight), alignment: .center)
         }
         .padding()
         .touchBar {
@@ -61,8 +70,16 @@ struct ContentView: View {
         }
         
         Task {
+            let startTime = DispatchTime.now()
+            
             await renderer.render()
+            
+            let endTime = DispatchTime.now()
+            let elapsedTime = endTime.uptimeNanoseconds - startTime.uptimeNanoseconds
+            let timeInterval = Double(elapsedTime) / 1_000_000_000
+            self.infoMessage = "Render time: '\(timeInterval)' seconds"
             updateProgressTimer.invalidate()
+            
             self.rendering = false
             
             let img = NSImage(

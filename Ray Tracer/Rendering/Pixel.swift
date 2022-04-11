@@ -2,8 +2,10 @@ import Foundation
 
 public class Pixel {
     public static let range = 0.0...1.0
-    public static let bitsPerComponent = 32
+    public static let bitsPerComponent = 16
     public static let componentCount = 4
+    public static let bitsPerPixel = 64
+    
     
     private var data: [Double]
     
@@ -19,6 +21,16 @@ public class Pixel {
         }
     }
     
+    public var redBytes: [UInt8] {
+        get {
+            let val = UInt16(self.red * Double(UINT16_MAX))
+            return [
+                UInt8(val >> 8),
+                UInt8(val & 0xFF)
+            ]
+        }
+    }
+    
     public var green: Double {
         get { return self.data[1] }
         set(g) { self.data[1] = g.clamp(Pixel.range) }
@@ -28,6 +40,16 @@ public class Pixel {
         get { return UInt8(self.green * Double(UINT8_MAX)) }
         set(g) {
             self.green = Double(g) / Double(UINT8_MAX)
+        }
+    }
+    
+    public var greenBytes: [UInt8] {
+        get {
+            let val = UInt16(self.green * Double(UINT16_MAX))
+            return [
+                UInt8(val >> 8),
+                UInt8(val & 0xFF)
+            ]
         }
     }
     
@@ -43,6 +65,16 @@ public class Pixel {
         }
     }
     
+    public var blueBytes: [UInt8] {
+        get {
+            let val = UInt16(self.blue * Double(UINT16_MAX))
+            return [
+                UInt8(val >> 8),
+                UInt8(val & 0xFF)
+            ]
+        }
+    }
+    
     public var alpha: Double {
         get { return self.data[3] }
         set(a) { self.data[3] = a.clamp(Pixel.range) }
@@ -55,6 +87,16 @@ public class Pixel {
         }
     }
     
+    public var alphaBytes: [UInt8] {
+        get {
+            let val = UInt16(self.alpha * Double(UINT16_MAX))
+            return [
+                UInt8(val >> 8),
+                UInt8(val & 0xFF)
+            ]
+        }
+    }
+    
     public init() {
         self.data = [0.0, 0.0, 0.0, 0.0]
     }
@@ -63,13 +105,13 @@ public class Pixel {
         self.data = [r, g, b, a]
     }
     
-    public func getData() -> Data {
-        return Data([
-            self.u8alpha,
-            self.u8red,
-            self.u8green,
-            self.u8blue
-        ])
+    public var pixBytes: [UInt8] {
+        var bytes: [UInt8] = []
+        bytes.append(contentsOf: self.alphaBytes)
+        bytes.append(contentsOf: self.redBytes)
+        bytes.append(contentsOf: self.greenBytes)
+        bytes.append(contentsOf: self.blueBytes)
+        return bytes
     }
     
     public static func +=(left: inout Pixel, right: Pixel) {

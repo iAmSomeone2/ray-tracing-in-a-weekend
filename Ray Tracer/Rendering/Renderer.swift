@@ -5,35 +5,37 @@ actor RenderContext {
     private let width: UInt16
     private let height: UInt16
     
-    private var storage: [[Pixel]]
+//    private var storage: [[Pixel]]
+    private var storage: Data
+    public var data: Data { self.storage }
     
     init(width: UInt16, height: UInt16) {
         self.width = width
         self.height = height
-        self.storage = Array(
-            repeating: Array(repeating: Pixel(), count: Int(height)),
-            count: Int(width))
+        self.storage = Data(
+            repeating: 0,
+            count: (Int(width) * Int(height)) * (Pixel.bitsPerComponent/8) * Pixel.componentCount)
     }
     
-    public func getPixel(at loc: (x: UInt16, y: UInt16)) -> Pixel {
-        return self.storage[Int(loc.x)][Int(loc.y)]
+    private func getIndex(for loc: (x: UInt16, y: UInt16)) -> Int {
+        let pixelCount = (Int(loc.y) * Int(self.width)) + Int(loc.x)
+        return pixelCount * (Pixel.bitsPerPixel / 8)
     }
     
-    public func setPixel(_ pixel: Pixel, at loc: (x: UInt16, y: UInt16)) {
-        self.storage[Int(loc.x)][Int(loc.y)] = pixel
-    }
+//    public func setPixel(_ pixel: Pixel, at loc: (x: UInt16, y: UInt16)) {
+//        let index = self.getIndex(for: loc)
+//        let pixData = pixel.pixBytes
+//        for i in 0..<pixData.count {
+//            self.storage[index + i] = pixData[i]
+//        }
+//    }
     
-    public func getData() -> Data {
-        var renderData = Data()
-        
-        for y in 0..<self.height {
-            for x in 0..<self.width {
-                let pixel = self.getPixel(at: (x, y))
-                renderData.append(contentsOf: pixel.getData())
-            }
+    public func setRow(bytes: [UInt8], row: UInt16) {
+        let startIdx = (Int(row) * Int(self.width)) * (Pixel.bitsPerPixel / 8)
+        for i in 0..<bytes.count {
+            let idx = startIdx + i
+            self.storage[idx] = bytes[i]
         }
-        
-        return renderData
     }
 }
 
@@ -51,8 +53,8 @@ public actor RenderProgress {
         self.value = 0
     }
     
-    public func increment() {
-        self.value += 1
+    public func increment(by inc: UInt32 = 1) {
+        self.value += inc
     }
 }
 
@@ -86,27 +88,33 @@ public struct Renderer {
     }
     
     private func renderRow(_ row: UInt16) async {
+        var rowBytes: [UInt8] = []
         for x in 1..<self.width {
             let col = self.width - x
             let u = Double(col) / Double(self.width - 1)
             let v = Double(row) / Double(self.height - 1)
             let ray = camera.getRay(for: (u, v))
             
-            await self.context.setPixel(ray.color(self.scene), at: (col, height-row))
-            await self.renderProgress.increment()
+            let pixel = ray.color(self.scene)
+            for i in 0..<pixel.pixBytes.count {
+                rowBytes.append(pixel.pixBytes[i])
+            }
         }
+        // Write row to shared buffer
+        await self.context.setRow(bytes: rowBytes, row: self.height - row)
+        await self.renderProgress.increment(by: UInt32(self.width))
     }
     
     public func getCGImage() async -> CGImage {
         // Get finished data from render context and create CGImage
-        let renderData = await self.context.getData()
+        let renderData = await self.context.data
         
         return CGImage(
             width: Int(self.width),
             height: Int(self.height),
-            bitsPerComponent: 8,
-            bitsPerPixel: 8 * Pixel.componentCount,
-            bytesPerRow: Pixel.componentCount * Int(self.width),
+            bitsPerComponent: Pixel.bitsPerComponent,
+            bitsPerPixel: Pixel.bitsPerPixel,
+            bytesPerRow: 8 * Int(self.width),
             space: Renderer.colorSpace,
             bitmapInfo: CGBitmapInfo(rawValue: CGImageAlphaInfo.first.rawValue),
             provider: CGDataProvider(data: renderData as CFData)!,
@@ -120,7 +128,6 @@ public struct Renderer {
         // Render scene
         await withTaskGroup(of: Void.self) { group in
             for y in 1..<self.height {
-//                let row = self.height - y
                 group.addTask {
                     await renderRow(y)
                 }
