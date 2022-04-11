@@ -20,10 +20,16 @@ public struct Ray {
         return self.origin + (t * self.direction)
     }
     
-    public func color(_ p: Renderable) -> Pixel {
+    public func color(_ p: Renderable, depth: UInt16) -> Pixel {
+        if depth <= 0 {
+            return Pixel(red: 0, green: 0, blue: 0)
+        }
+        
         let hit = p.checkHit(with: self, tMin: 0.001, tMax: Double.infinity)
         if hit.didHit {
-            return 0.5 * (hit.normal! + Pixel(red: 1, green: 1, blue: 1))
+//            let target = hit.point! + hit.normal! + Vec3.randomInUnitSphere().unitVector
+            let target = hit.point! + Vec3.randomInHemisphere(normal: hit.normal!)
+            return 0.5 * Ray(origin: hit.point!, direction: target - hit.point!).color(p, depth: depth - 1)
         }
         
         let unitDir = self.direction.unitVector

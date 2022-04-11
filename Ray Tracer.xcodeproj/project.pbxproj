@@ -23,6 +23,7 @@
 		942284D727FF9FD000E63F29 /* Renderable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 942284D627FF9FD000E63F29 /* Renderable.swift */; };
 		942284D927FFA09500E63F29 /* Sphere.swift in Sources */ = {isa = PBXBuildFile; fileRef = 942284D827FFA09500E63F29 /* Sphere.swift */; };
 		942284DC2800D93500E63F29 /* RenderSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 942284DB2800D93500E63F29 /* RenderSettingsView.swift */; };
+		942284DF2804BA3F00E63F29 /* Material.swift in Sources */ = {isa = PBXBuildFile; fileRef = 942284DE2804BA3F00E63F29 /* Material.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -63,6 +64,7 @@
 		942284D627FF9FD000E63F29 /* Renderable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Renderable.swift; sourceTree = "<group>"; };
 		942284D827FFA09500E63F29 /* Sphere.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sphere.swift; sourceTree = "<group>"; };
 		942284DB2800D93500E63F29 /* RenderSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RenderSettingsView.swift; sourceTree = "<group>"; };
+		942284DE2804BA3F00E63F29 /* Material.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Material.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -151,6 +153,7 @@
 		942284C827FE0ADA00E63F29 /* Rendering */ = {
 			isa = PBXGroup;
 			children = (
+				942284DD2804BA2B00E63F29 /* Materials */,
 				942284D527FF9F8900E63F29 /* Primatives */,
 				942284C927FE0B0800E63F29 /* Renderer.swift */,
 				942284CB27FE0C6B00E63F29 /* Pixel.swift */,
@@ -178,6 +181,14 @@
 				942284DB2800D93500E63F29 /* RenderSettingsView.swift */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		942284DD2804BA2B00E63F29 /* Materials */ = {
+			isa = PBXGroup;
+			children = (
+				942284DE2804BA3F00E63F29 /* Material.swift */,
+			);
+			path = Materials;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -314,6 +325,7 @@
 				942284DC2800D93500E63F29 /* RenderSettingsView.swift in Sources */,
 				942284D727FF9FD000E63F29 /* Renderable.swift in Sources */,
 				942284D427FF8E7700E63F29 /* Camera.swift in Sources */,
+				942284DF2804BA3F00E63F29 /* Material.swift in Sources */,
 				942284CC27FE0C6B00E63F29 /* Pixel.swift in Sources */,
 				942284CE27FE116B00E63F29 /* utility.swift in Sources */,
 				942284A027FDD09F00E63F29 /* ContentView.swift in Sources */,

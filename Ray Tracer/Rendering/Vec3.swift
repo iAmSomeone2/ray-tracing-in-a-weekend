@@ -92,10 +92,49 @@ public class Vec3 {
         return (self.x * other.x) + (self.y * other.y) + (self.z * other.z)
     }
     
+    /// Calculate the cross product of this and another Vec3
+    ///
+    /// - Parameters:
+    ///     - other: other Vec3 used for calculation
+    /// - Returns: Cross product of this Vec3 and the other Vec3
     public func cross(_ other: Vec3) -> Vec3 {
         return Vec3(
             x: (self.y * other.z) - (self.z * other.y),
             y: (self.z * other.x) - (self.x * other.z),
             z: (self.x * other.y) - (self.y * other.x))
+    }
+    
+    /// Generates a random Vec3
+    ///
+    /// - Parameters:
+    ///     - range: range to restrict generated coordinates to
+    /// - Returns: a Vec3 with random values for x, y, and z
+    public static func random(in range: ClosedRange<Double> = 0...1) -> Vec3 {
+        return Vec3(
+            x: Double.random(in: range),
+            y: Double.random(in: range),
+            z: Double.random(in: range))
+    }
+    
+    /// Create a new random Vec3 that falls within the unit sphere
+    ///
+    /// - Returns: generated Vec3
+    public static func randomInUnitSphere() -> Vec3 {
+        while true {
+            let p = Vec3.random(in: -1...1)
+            if p.squaredLength >= 1 {
+                continue
+            }
+            
+            return p
+        }
+    }
+    
+    public static func randomInHemisphere(normal: Vec3) -> Vec3 {
+        let randVec = Vec3.randomInUnitSphere()
+        if randVec.dot(normal) > 0.0 {
+            return randVec
+        }
+        return -randVec
     }
 }

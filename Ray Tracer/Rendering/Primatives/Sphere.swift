@@ -9,7 +9,7 @@ public struct Sphere : Renderable {
         self.radius = r
     }
     
-    public func checkHit(with ray: Ray, tMin: Double = 0.0, tMax: Double = Double.infinity) -> HitRecord {
+    public func checkHit(with ray: Ray, tMin: Double = 0.001, tMax: Double = Double.infinity) -> HitRecord {
         let oc = ray.origin - self.origin
         let a = ray.direction.squaredLength
         let halfB = oc.dot(ray.direction)

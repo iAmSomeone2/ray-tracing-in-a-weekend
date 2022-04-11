@@ -22,14 +22,6 @@ actor RenderContext {
         return pixelCount * (Pixel.bitsPerPixel / 8)
     }
     
-//    public func setPixel(_ pixel: Pixel, at loc: (x: UInt16, y: UInt16)) {
-//        let index = self.getIndex(for: loc)
-//        let pixData = pixel.pixBytes
-//        for i in 0..<pixData.count {
-//            self.storage[index + i] = pixData[i]
-//        }
-//    }
-    
     public func setRow(bytes: [UInt8], row: UInt16) {
         let startIdx = (Int(row) * Int(self.width)) * (Pixel.bitsPerPixel / 8)
         for i in 0..<bytes.count {
@@ -59,10 +51,12 @@ public actor RenderProgress {
 }
 
 public struct Renderer {
-    public static let colorSpace = CGColorSpace(name: CGColorSpace.sRGB)!
+    public static let colorSpace = CGColorSpace(name: CGColorSpace.linearSRGB)!
     
     private let width: UInt16
     private let height: UInt16
+    public var sampleCount: UInt16
+    public var depth: UInt16 = 50
     
     private var context: RenderContext
     private var renderProgress: RenderProgress
@@ -71,9 +65,10 @@ public struct Renderer {
 //    private let sphere = Sphere(origin: Vec3(x: 0, y: 0, z: -1), radius: 0.5)
     public var scene = RenderableList()
     
-    public init(width w: UInt16 = 256, height h: UInt16 = 256) {
+    public init(width w: UInt16 = 256, height h: UInt16 = 256, sampleCount samples: UInt16 = 100) {
         self.width = w
         self.height = h
+        self.sampleCount = samples
         
         self.context = RenderContext(width: w, height: h)
         self.renderProgress = RenderProgress(target: UInt32(w) * UInt32(h))
@@ -91,18 +86,25 @@ public struct Renderer {
         var rowBytes: [UInt8] = []
         for x in 1..<self.width {
             let col = self.width - x
-            let u = Double(col) / Double(self.width - 1)
-            let v = Double(row) / Double(self.height - 1)
-            let ray = camera.getRay(for: (u, v))
             
-            let pixel = ray.color(self.scene)
+            var pixel = Pixel(red: 0, green: 0, blue: 0)
+            for _ in 0..<sampleCount {
+                let u = (Double(col) + Double.random(in: 0...1)) / Double(self.width - 1)
+                let v = (Double(row) + Double.random(in: 0...1)) / Double(self.height - 1)
+                let ray = camera.getRay(for: (u, v))
+                pixel += ray.color(self.scene, depth: self.depth)
+            }
+            
+            let scale = 1.0 / Double(self.sampleCount)
+            pixel *= scale
+            
             for i in 0..<pixel.pixBytes.count {
                 rowBytes.append(pixel.pixBytes[i])
             }
+            await self.renderProgress.increment(by: 1)
         }
         // Write row to shared buffer
         await self.context.setRow(bytes: rowBytes, row: self.height - row)
-        await self.renderProgress.increment(by: UInt32(self.width))
     }
     
     public func getCGImage() async -> CGImage {

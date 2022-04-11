@@ -1,19 +1,12 @@
-//
-//  RenderSettingsView.swift
-//  Ray Tracer
-//
-//  Created by Brenden Davidson on 4/8/22.
-//
-
 import SwiftUI
 
-struct DimensionInput: View {
+struct NumberInput: View {
     var title: String
     var imageName: String
     
-    @Binding var resolution: Int
+    @Binding var value: Int
     
-    private let resFormatter = NumberFormatter()
+    private let formatter = NumberFormatter()
     
     var body: some View {
         HStack {
@@ -21,7 +14,7 @@ struct DimensionInput: View {
                 .resizable()
                 .aspectRatio(contentMode: .fit)
                 .frame(width: 16, height: 16, alignment: .center)
-            TextField(title, value: $resolution, formatter: resFormatter)
+            TextField(title, value: $value, formatter: formatter)
                 .frame(width: 48, alignment: .center)
                 .disableAutocorrection(/*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
                 .lineLimit(/*@START_MENU_TOKEN@*/1/*@END_MENU_TOKEN@*/)
@@ -36,13 +29,28 @@ struct DimensionInput: View {
 struct RenderSettingsView: View {
     @Binding var width: Int
     @Binding var height: Int
-    @Binding var samples: Int
+    @Binding var samples: CGFloat
     
     var body: some View {
         GroupBox("Settings") {
-            DimensionInput(title: "width", imageName: "arrow.left.and.right.square", resolution: $width)
-                .padding([.top, .leading, .trailing])
-            DimensionInput(title: "height", imageName: "arrow.up.and.down.square", resolution: $height)
+            VStack(alignment: .leading, spacing: 4) {
+                Text("Resolution")
+                NumberInput(title: "width", imageName: "arrow.left.and.right.square", value: $width)
+                NumberInput(title: "height", imageName: "arrow.up.and.down.square", value: $height)
+            }
+            .padding()
+            VStack(alignment: .leading, spacing: 4){
+                Text("Samples: \(Int(samples))")
+                Slider(value: $samples, in: 5...200, step: 15) {
+                    Text("")
+                } minimumValueLabel: {
+                    Text("5")
+                } maximumValueLabel: {
+                    Text("200")
+                }
+                .frame(width: 240, alignment: .leading)
+            }
+            .padding()
         }
     }
 }
